@@ -78,3 +78,11 @@ comments: true
 这里**product_logo_maps_color_144.png**是中间显示的类似App Logo，**googlelogo_dark20_color_120x44.png**自然是下面那个`Google`字样的图片了。
 
 看到这里应该明白了。
+
+关于闪屏，还可参考：
+
+https://www.youtube.com/watch?v=pEGWcMTxs3I&feature=youtu.be&t=1434
+
+https://www.google.com/design/spec/patterns/launch-screens.html#
+
+http://www.cyrilmottier.com/2012/05/03/splash-screens-are-evil-dont-use-them/
