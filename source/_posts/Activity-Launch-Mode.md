@@ -1,5 +1,5 @@
 title: Activity LaunchMode
-date: 2014-03-22 15:50:49
+date: 2015-03-22 15:50:49
 categories: Android
 tags: LaunchMode
 comments: true

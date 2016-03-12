@@ -1,5 +1,5 @@
 title: Activity生命周期
-date: 2014-03-12 13:50:28
+date: 2015-03-12 13:50:28
 categories: Android
 tags: lifecycle
 comments: true
