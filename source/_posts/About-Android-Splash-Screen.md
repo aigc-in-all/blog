@@ -17,6 +17,8 @@ comments: true
 
 很明显Google Map的体验好一些。在好奇心的驱使下，反编译了Google Map，我们一起来看看它是怎样实现的。
 
+<!-- more -->
+
 首先看它的AndroidManifest.xml，看看它的Launcher Activity有没有什么特殊的配置。
 
 ```
