@@ -119,62 +119,6 @@ public class NewworkClassLoaderTest {
 }
 ```
 
-```java
-public class NetWorkClassLoader extends ClassLoader {
-
-    private String rootUrl;
-
-    public NetWorkClassLoader(String rootUrl) {
-        this.rootUrl = rootUrl;
-    }
-
-    @Override
-    protected Class<?> findClass(String name) throws ClassNotFoundException {
-        Class<?> clazz = null;
-        byte[] classData = getClassData(name);
-        if (classData == null) {
-            throw new ClassNotFoundException();
-        }
-        clazz = defineClass(name, classData, 0, classData.length);
-
-        return clazz;
-    }
-
-    private byte[] getClassData(String name) {
-        InputStream input = null;
-
-        try {
-            String path = classNameToPath(name);
-            URL url = new URL(path);
-            byte[] buff = new byte[1024 * 4];
-            int len = -1;
-            input = url.openStream();
-            ByteArrayOutputStream boas = new ByteArrayOutputStream();
-            while ((len = input.read(buff)) != -1) {
-                boas.write(buff, 0, len);
-            }
-            return boas.toByteArray();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (input != null) {
-                try {
-                    input.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        return null;
-    }
-
-    private String classNameToPath(String name) {
-        return rootUrl + "/" + name.replace(".", "/") + ".class";
-    }
-}
-```
-
 首先获得网络上一个class文件的二进制名称，然后通过自定义的类加载器NetworkClassLoader创建两个实例，并根据网络地址分别加载这份class，并得到这两个ClassLoader实例加载后生成的Class实例clazz1和clazz2，最后将这两个Class实例分别生成具体的实例对象obj1和obj2，再通过反射调用clazz1中的setNetClassLoaderSimple方法。
 
 * 查看测试结果
