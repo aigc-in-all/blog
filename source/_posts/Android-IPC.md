@@ -310,7 +310,7 @@ Binder的唯一标识，一般用当前Binder的类名表示。
 
 **onTransact**
 
-这个方法运行在服务端的Binder线程池中，当客户端发起跨进程请求时，远程请求会通过系统底层封装后交由此方法来处理。该方法的原型为```public boolean onTransact(int code, android.os.Parcel data, android.os.Parcel reply, int flags)```。服务端通过code可以确定客户端请求的方法是什么，接着从data中取出目标方法所需的参数(如果目标方法有参数的话)，然后执行目标方法。当目标方法执行完毕后，就向reply中写入返回值，如果此方法返回false，那么客户端的请求会失败，因此我们可以利用这个特性来做权限验证，毕竟我们也没希望随便一个远程都能远程调用我们的服务。
+这个方法运行在服务端的Binder线程池中，当客户端发起跨进程请求时，远程请求会通过系统底层封装后交由此方法来处理。该方法的原型为*public boolean onTransact(int code, android.os.Parcel data, android.os.Parcel reply, int flags)*。服务端通过code可以确定客户端请求的方法是什么，接着从data中取出目标方法所需的参数(如果目标方法有参数的话)，然后执行目标方法。当目标方法执行完毕后，就向reply中写入返回值，如果此方法返回false，那么客户端的请求会失败，因此我们可以利用这个特性来做权限验证，毕竟我们也没希望随便一个远程都能远程调用我们的服务。
 
 **Proxy#getBookList**
 
