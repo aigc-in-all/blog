@@ -11,7 +11,7 @@ categories: Java
 
 ## 什么是ClassLoader
 
-大家都知道，当我们写好一个Java程序之后，不管是CS还是BS应用，都是由若干个.class文件组织而成的一个完整的Java应用程序，当程序在支行时，即会调用该程序的一个入口函数来调用系统的相关功能，而这些功能都被封装在不同的class文件当中，所以经常要从这个class文件中调用另外一个class文件中的方法，如果另外一个文件不存在，则会引发系统异常。而程序在启动的时候，并不会一次性加载程序所要用的所有class文件，而是根据程序的需要，通过Java的类加载机制（ClassLoader）来动态加载某个class文件到内存当中的，从而只有class文件被载入到了内存之后，才能被其它class所引用。所以ClassLoader就是用来动态加载class文件到内存当中用的。
+大家都知道，当我们写好一个Java程序之后，不管是CS还是BS应用，都是由若干个.class文件组织而成的一个完整的Java应用程序，当程序在运行时，即会调用该程序的一个入口函数来调用系统的相关功能，而这些功能都被封装在不同的class文件当中，所以经常要从这个class文件中调用另外一个class文件中的方法，如果另外一个文件不存在，则会引发系统异常。而程序在启动的时候，并不会一次性加载程序所要用的所有class文件，而是根据程序的需要，通过Java的类加载机制（ClassLoader）来动态加载某个class文件到内存当中的，从而只有class文件被载入到了内存之后，才能被其它class所引用。所以ClassLoader就是用来动态加载class文件到内存当中用的。
 
 ## Java默认提供三个ClassLoader
 
@@ -165,7 +165,7 @@ System.out.println(loader);
  
 第二行的结果为null，是因为ExtClassLoader的父类加载器是Bootstrap ClassLoader。
 
-测试3：用Bootstrcp ClassLoader来加载ClassLoaderTest.class，有两种方式：
+测试3：用Bootstrap ClassLoader来加载ClassLoaderTest.class，有两种方式：
 
 1. 在jvm中添加-Xbootclasspath参数，指定Bootstrcp ClassLoader加载类的路径，并追加我们自已的jar（ClassTestLoader.jar）
 2. 将class文件放到JAVA_HOME/jre/classes/目录下（上面有提到）
