@@ -1,6 +1,8 @@
 title: Android消息处理机制(Handler、Looper、MessageQueue与Message)
 date: 2016-04-21 18:18:22
-tags: Message
+tags: 
+- Android
+- Message
 categories: Android
 comments: false
 ---

@@ -3,6 +3,7 @@ layout: post
 title: "签名你的应用程序"
 date: 2014-05-24 22:23:41 +0800
 comments: true
+tags: Android
 categories: Android
 ---
 

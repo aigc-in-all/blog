@@ -1,7 +1,9 @@
 title: ReadWriteLock
 date: 2016-02-29 13:03:28
 categories: Java
-tags: Java Thread
+tags:
+- Java
+- Thread
 comments: true
 ---
 

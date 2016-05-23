@@ -1,6 +1,8 @@
 title: Android IPC
 date: 2015-04-5 19:28:40
-tags: ipc
+tags: 
+- Android
+- IPC
 categories: Android
 comments: true
 ---

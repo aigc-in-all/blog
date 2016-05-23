@@ -1,6 +1,8 @@
 title: Java理论与实践：处理InterruptedException
 date: 2016-02-23 22:43:14
-tags: InterruptedException
+tags:
+- Java 
+- InterruptedException
 categories: Java
 comments: true
 ---

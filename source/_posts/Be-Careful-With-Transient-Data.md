@@ -1,7 +1,9 @@
 title: Be Careful With Transient Data
 date: 2016-02-29 17:06:03
 categories: Java
-tags: transient
+tags:
+- Java 
+- transient
 comments: true
 ---
 

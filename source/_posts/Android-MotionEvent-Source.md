@@ -1,6 +1,8 @@
 title: Android中点击事件的来源
 date: 2016-03-13 15:52:02
-tags: events
+tags:
+- Android 
+- Events
 categories: Android
 comments: true
 ---

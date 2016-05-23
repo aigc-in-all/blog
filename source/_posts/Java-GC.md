@@ -1,6 +1,8 @@
 title: 理解 Java 垃圾回收机制
 date: 2016-02-15 21:55:40
-tags: GC
+tags: 
+- Java
+- GC
 comments: true
 categories: Java
 ---

@@ -1,6 +1,8 @@
 title: Android Handler源码分析
 date: 2016-04-20 20:55:14
-tags: Handler
+tags:
+- Android 
+- Handler
 categories: Android
 comments: false
 ---

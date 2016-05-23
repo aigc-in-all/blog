@@ -1,6 +1,8 @@
 title: HashMap工作原理
 date: 2016-03-14 19:02:30
-tags: HashMap
+tags: 
+- Java 
+- HashMap
 comments: true
 categories: Java
 ---

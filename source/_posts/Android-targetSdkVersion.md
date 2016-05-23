@@ -1,6 +1,8 @@
 title: 理解targetSdkVersion
 date: 2016-04-02 13:05:00
-tags: targetSdkVersion
+tags:
+- Android 
+- targetSdkVersion
 categories: Android
 comments: true
 ---

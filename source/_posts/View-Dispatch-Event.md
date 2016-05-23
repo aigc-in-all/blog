@@ -1,6 +1,8 @@
 title: View事件分发机制
 date: 2015-12-13 22:04:37
-tags: events
+tags:
+- Android 
+- events
 categories: Android
 comments: true
 ---

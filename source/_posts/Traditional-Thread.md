@@ -1,6 +1,8 @@
 title: 传统线程机制的回顾
 date: 2016-02-29 00:02:13
-tags: Java Thead
+tags: 
+- Java
+- Thead
 ---
 
 ## 传统线程机制的回顾

@@ -1,7 +1,9 @@
 title: Java并发编程：volatile关键字解析
 date: 2016-02-29 19:11:19
 categories: Java
-tags: volatile
+tags: 
+- Java
+- volatile
 comments: true
 ---
 

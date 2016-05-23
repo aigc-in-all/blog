@@ -1,7 +1,9 @@
 title: 三个线程，顺序打印ABC
 date: 2016-02-29 13:32:08
 categories: Java
-tags: Java Thread
+tags: 
+- Java
+- Thread
 comments: true
 ---
 
