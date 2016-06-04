@@ -1,6 +1,8 @@
 title: Ubuntu 14.04配置OpenVPN
 date: 2015-03-01 17:51:42
-tags: OpenVPN
+tags: 
+- OpenVPN
+- VPN
 ---
 ### 第一步 安装和配置OpenVPN环境
 
