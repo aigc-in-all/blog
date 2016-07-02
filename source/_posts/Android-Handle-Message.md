@@ -10,7 +10,7 @@ comments: false
 > 原文 http://www.cnblogs.com/angeldevil/p/3340644.html
 > 作者 [AngelDevil](http://www.cnblogs.com/angeldevil)
 
-此篇结合Android底层源码分析Android的消息处理机制，涉及到C/C++相关知识，关于Java应用层上的源码分析参考[Android Handler源码解析](http://www.heqingbao.net/2016/04/21/Android-Handler/)
+此篇结合Android底层源码分析Android的消息处理机制，涉及到C/C++相关知识，关于Android应用层上的源码分析参考[Android Handler源码解析](http://www.heqingbao.net/2016/04/20/Android-Handler/)
 
 Android是消息驱动的，实现消息驱动有几个要素：
 
