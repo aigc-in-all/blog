@@ -9,7 +9,9 @@ comments: false
 
 HashMap和HashSet的区别是Java面试中最常被问到的问题，如果没有涉及到Collections框架和多线程的面试，可以说是不完整的。而Collections框架的问题不涉及到HashMap和HashSet，也可以说是不完整的。HashMap和HashSet都是Collections框架的一部分，它们让我们能够使用对象的集合。Collections框架有自己的接口和实现，主要分为Set接口，List接口和Queue接口。它们有各自的特点，Set的集合里面不允许对象有重复的值，List允许有重复，它对集合中的对象进行索引，Queue的工作原理是FCFS算法（First Come，First Server）。
 
-首先让我们来看看什么 是HashMap和HashSet，然后再来比较它们之间的区别。
+<!-- more -->
+
+关于HashMap可以参考[HashMap工作原理](http://www.heqingbao.net/2016/03/14/Java_HashMap/)。这里主要分析HashSet，以及它与HashMap的区别。
 
 ### 什么是HashSet
 
@@ -32,7 +34,7 @@ HashMap实现了Map接口                | HashSet实现了Set接口
 HashMap中使用键对象来计算hashCode值 | HashSet使用成员对象来计算hashCode值，对于两个对象来说hashCode可能相同，所以equals()方法用来判断对象的相等性，如果两个对象不同的话，那么返回false
 HashMap比较快，因为是使用唯一的键来获取对象 | HashSet较HashMap来说比较慢
 
-关于HashMap可以参考[HashMap工作原理](http://www.heqingbao.net/2016/03/14/Java_HashMap/)，这里从源码的角度来分析下HashSet的内部实现。
+这里从源码的角度来分析下HashSet的内部实现。
 
 > Read the fuck source code —— Linus
 
