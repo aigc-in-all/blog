@@ -1,3 +1,6 @@
 [submodule "themes/next"]
 	path = themes/next
 	url = git@github.com:heqingbao/hexo-theme-next.git
+[submodule "themes/yilia"]
+	path = themes/yilia
+	url = git@github.com:heqingbao/hexo-theme-yilia.git
