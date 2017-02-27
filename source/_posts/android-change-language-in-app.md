@@ -4,6 +4,7 @@ categories: Android
 tags:
 - 国际化
 comments: true
+reward: true
 ---
 
 最近Android项目需要做国际化，支持多种语言，借此机会学习学习。
