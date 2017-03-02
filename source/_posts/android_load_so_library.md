@@ -92,13 +92,13 @@ compile 'com.tencent.mars:mars-wrapper:1.1.3'
 * 为了保证 apk 体积，只保留 **armeabi** 和 **armeabi-v7a** 两个文件夹，并保证这两个文件夹中 .so 数量一致。
 
 
-[1]: test/1.png
-[2]: test/2.png
-[3]: test/3.png
-[4]: test/4.png
-[5]: test/5.png
-[6]: test/6.png
-[7]: test/7.png
+[1]: android_load_so_library/1.jpg
+[2]: android_load_so_library/2.jpg
+[3]: android_load_so_library/3.jpg
+[4]: android_load_so_library/4.jpg
+[5]: android_load_so_library/5.jpg
+[6]: android_load_so_library/6.jpg
+[7]: android_load_so_library/7.jpg
 
 [50]: https://developer.android.com/ndk/guides/abis.html
 [51]: https://github.com/Tencent/mars
