@@ -462,7 +462,7 @@ public interface IApplicationThread extends IInterface {
 }
 ```
 
-因为它继承了IInterface接口，所以它是一个Binder类型的接口。从IApplicationThread声明的接口方法可以看出，其内部包含了大师的启动、停止Activity的接口，此外还包含了启动/停止服务的接口。从接口的方法命名可以猜测，IApplicationThread这个Binder接口的实现者完成了大量和Activity以及Service启动/停止想着的功能。
+因为它继承了IInterface接口，所以它是一个Binder类型的接口。从IApplicationThread声明的接口方法可以看出，其内部包含了大量的启动、停止Activity的接口，此外还包含了启动/停止服务的接口。从接口的方法命名可以猜测，IApplicationThread这个Binder接口的实现者完成了大量和Activity以及Service启动/停止相关的功能。
 
 **IApplicationThread的实现者就是ActivityThread中的内部类ApplicationThread**
 
