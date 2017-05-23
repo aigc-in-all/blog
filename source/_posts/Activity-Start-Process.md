@@ -5,6 +5,8 @@ tags: Activity
 comments: true
 ---
 
+*注：本文所分析的源码基于Android 7.0*
+
 我们从Activity的startActivity方法开始分析，startActivity有好几种重载方式，但最终它们都会调用startActivityForResult方法。
 
 ```java
@@ -195,88 +197,95 @@ public static void checkStartActivityResult(int res, Object intent) {
 @Override
 public final int startActivity(IApplicationThread caller, String callingPackage,
         Intent intent, String resolvedType, IBinder resultTo, String resultWho, int requestCode,
-        int startFlags, ProfilerInfo profilerInfo, Bundle options) {
+        int startFlags, ProfilerInfo profilerInfo, Bundle bOptions) {
     return startActivityAsUser(caller, callingPackage, intent, resolvedType, resultTo,
-        resultWho, requestCode, startFlags, profilerInfo, options,
-        UserHandle.getCallingUserId());
+            resultWho, requestCode, startFlags, profilerInfo, bOptions,
+            UserHandle.getCallingUserId());
 }
 
 @Override
 public final int startActivityAsUser(IApplicationThread caller, String callingPackage,
         Intent intent, String resolvedType, IBinder resultTo, String resultWho, int requestCode,
-        int startFlags, ProfilerInfo profilerInfo, Bundle options, int userId) {
+        int startFlags, ProfilerInfo profilerInfo, Bundle bOptions, int userId) {
     enforceNotIsolatedCaller("startActivity");
-    userId = handleIncomingUser(Binder.getCallingPid(), Binder.getCallingUid(), userId,
-            false, ALLOW_FULL_ONLY, "startActivity", null);
+    userId = mUserController.handleIncomingUser(Binder.getCallingPid(), Binder.getCallingUid(),
+            userId, false, ALLOW_FULL_ONLY, "startActivity", null);
     // TODO: Switch to user app stacks here.
-    return mStackSupervisor.startActivityMayWait(caller, -1, callingPackage, intent,
+    return mActivityStarter.startActivityMayWait(caller, -1, callingPackage, intent,
             resolvedType, null, null, resultTo, resultWho, requestCode, startFlags,
-            profilerInfo, null, null, options, false, userId, null, null);
+            profilerInfo, null, null, bOptions, false, userId, null, null);
 }
 ```
 
-可见，Activity的启动过程又转移到了ActivityStackSupervisor中的startActivityMayWait方法中了。在startActivityMayWait又调用了startActivityLocked，然后startActivityLocked方法中又调用了startActivityUncheckedLocked方法，接着startActivityUncheckedLocked又调用了ActivityStack的resumeTopActivityLocked方法，这个时候Activity启动过程已经从ActivityStackSupervisor转移到了ActivityStack。
+可见，Activity的启动过程又转移到了ActivityStarter中的startActivityMayWait方法中了。在startActivityMayWait又调用了startActivityLocked，然后startActivityLocked方法中又调用了startActivityUnchecked方法，接着startActivityUnchecked又调用了ActivityStackSupervisor的resumeFocusedStackTopActivityLocked方法：
 
-ActivityStack#resumeTopActivityLocked
-
-```java
-final boolean resumeTopActivityLocked(ActivityRecord prev, Bundle options) {
-    if (mStackSupervisor.inResumeTopActivity) {
-        // Don't even start recursing.
-        return false;
+```
+boolean resumeFocusedStackTopActivityLocked(
+        ActivityStack targetStack, ActivityRecord target, ActivityOptions targetOptions) {
+    if (targetStack != null && isFocusedStack(targetStack)) {
+        return targetStack.resumeTopActivityUncheckedLocked(target, targetOptions);
     }
+    final ActivityRecord r = mFocusedStack.topRunningActivityLocked();
+    if (r == null || r.state != RESUMED) {
+        mFocusedStack.resumeTopActivityUncheckedLocked(null, null);
+    }
+    return false;
+}
+```
 
-    boolean result = false;
-    try {
-        // Protect against recursion.
-        mStackSupervisor.inResumeTopActivity = true;
-        if (mService.mLockScreenShown == ActivityManagerService.LOCK_SCREEN_LEAVING) {
-            mService.mLockScreenShown = ActivityManagerService.LOCK_SCREEN_HIDDEN;
-            mService.updateSleepIfNeededLocked();
+可以看到又调用了ActivityStack的resumeTopActivityUncheckedLocked方法：
+
+```
+    boolean resumeTopActivityUncheckedLocked(ActivityRecord prev, ActivityOptions options) {
+        if (mStackSupervisor.inResumeTopActivity) {
+            // Don't even start recursing.
+            return false;
         }
-        result = resumeTopActivityInnerLocked(prev, options);
-    } finally {
-        mStackSupervisor.inResumeTopActivity = false;
+
+        boolean result = false;
+        try {
+            // Protect against recursion.
+            mStackSupervisor.inResumeTopActivity = true;
+            if (mService.mLockScreenShown == ActivityManagerService.LOCK_SCREEN_LEAVING) {
+                mService.mLockScreenShown = ActivityManagerService.LOCK_SCREEN_HIDDEN;
+                mService.updateSleepIfNeededLocked();
+            }
+            result = resumeTopActivityInnerLocked(prev, options);
+        } finally {
+            mStackSupervisor.inResumeTopActivity = false;
+        }
+        return result;
     }
-    return result;
-}
+
+    private boolean resumeTopActivityInnerLocked(ActivityRecord prev, ActivityOptions options) {
+        ...
+        mStackSupervisor.startSpecificActivityLocked(next, true, true);
+        ...
+    }
 ```
 
-上面可以看到resumeTopActivityLocked又调用resumeTopActivityInnerLocked方法，resumeTopActivityInnerLocked方法又调用了ActivityStackSupervisor#startSpecificActivityLocked方法，startSpecificActivityLocked源码如下所示：
+这个时候Activity启动过程又从ActivityStack转移到了ActivityStackSupervisor中。
 
-```java
+`ActivityStackSupervisor#startSpecificActivityLocked`
+
+```
 void startSpecificActivityLocked(ActivityRecord r,
         boolean andResume, boolean checkConfig) {
-    // Is this activity's application already running?
-    ProcessRecord app = mService.getProcessRecordLocked(r.processName,
-            r.info.applicationInfo.uid, true);
+    ...
+    realStartActivityLocked(r, app, andResume, checkConfig);
+    ...
+}
 
-    r.task.stack.setLaunchTime(r);
+final boolean realStartActivityLocked(ActivityRecord r, ProcessRecord app,
+        boolean andResume, boolean checkConfig) throws RemoteException {
+    ...
+    app.thread.scheduleLaunchActivity(new Intent(r.intent), r.appToken,
+                System.identityHashCode(r), r.info, new Configuration(mService.mConfiguration),
+                new Configuration(task.mOverrideConfig), r.compat, r.launchedFromPackage,
+                task.voiceInteractor, app.repProcState, r.icicle, r.persistentState, results,
+                newIntents, !andResume, mService.isNextTransitionForward(), profilerInfo);
+    ...
 
-    if (app != null && app.thread != null) {
-        try {
-            if ((r.info.flags&ActivityInfo.FLAG_MULTIPROCESS) == 0
-                    || !"android".equals(r.info.packageName)) {
-                // Don't add this if it is a platform component that is marked
-                // to run in multiple processes, because this is actually
-                // part of the framework so doesn't make sense to track as a
-                // separate apk in the process.
-                app.addPackage(r.info.packageName, r.info.applicationInfo.versionCode,
-                        mService.mProcessStats);
-            }
-            realStartActivityLocked(r, app, andResume, checkConfig);
-            return;
-        } catch (RemoteException e) {
-            Slog.w(TAG, "Exception when starting activity "
-                    + r.intent.getComponent().flattenToShortString(), e);
-        }
-
-        // If a dead object exception was thrown -- fall through to
-        // restart the application.
-    }
-
-    mService.startProcessLocked(r.processName, r.info.applicationInfo, true, 0,
-            "activity", r.intent.getComponent(), false, false, true);
 }
 ```
 
@@ -476,9 +485,7 @@ public final class ActivityThread {
 ```
 
 ```java
-public abstract class ApplicationThreadNative extends Binder
-        implements IApplicationThread {
-}
+public abstract class ApplicationThreadNative extends Binder implements IApplicationThread {...}
 
 class ApplicationThreadProxy implements IApplicationThread {...}
 ```
@@ -910,3 +917,9 @@ ContextImpl是一个很重要的数据结构，它是Context的具体实现，Co
 * 调用Activity的onCreate方法
 
 `mInstrumentation.callActivityOnCreate(activity, r.state)`，由于Activity已经被调用，这也意味着Activity已经完成了整个启动过程。
+
+------------------
+
+最后借用一张别人疏理好的图，可以直观的展示各个调用流程，感谢作者。
+
+![](Activity-Start-Process/Activity_Start_Process.png)
