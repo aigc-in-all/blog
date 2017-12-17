@@ -2,7 +2,7 @@ title: CentOS安装nginx
 date: 2017-12-16 16:23:52
 tags:
 - Linux
-- CnetOS
+- CentOS
 - Nginx
 ---
 

@@ -2,7 +2,7 @@ title: CentOS安装Tomcat
 date: 2017-12-16 16:52:16
 tags:
 - Linux
-- CnetOS
+- CentOS
 - Tomcat
 ---
 
