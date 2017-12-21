@@ -31,17 +31,18 @@ tags:
 ```
 [root@VM_64_70_centos ~]# cd nginx-1.12.2/
 [root@VM_64_70_centos nginx-1.12.2]# ./configure \
-> --prefix=/usr/local/nginx \
-> --pid-path=/var/run/nginx/nginx.pid \
-> --lock-path=/var/lock/nginx.lock \
-> --error-log-path=/var/log/nginx/error.log \
-> --http-log-path=/var/log/nginx/access.log \
-> --with-http_gzip_static_module \
-> --http-client-body-temp-path=/var/temp/nginx/client \
-> --http-proxy-temp-path=/var/temp/nginx/proxy \
-> --http-fastcgi-temp-path=/var/temp/nginx/fastcgi \
-> --http-uwsgi-temp-path=/var/temp/nginx/uwsgi \
-> --http-scgi-temp-path=/var/temp/nginx/scgi
+--prefix=/usr/local/nginx \
+--pid-path=/var/run/nginx/nginx.pid \
+--lock-path=/var/lock/nginx.lock \
+--error-log-path=/var/log/nginx/error.log \
+--http-log-path=/var/log/nginx/access.log \
+--with-http_gzip_static_module \
+--with-http_ssl_module \
+--http-client-body-temp-path=/var/temp/nginx/client \
+--http-proxy-temp-path=/var/temp/nginx/proxy \
+--http-fastcgi-temp-path=/var/temp/nginx/fastcgi \
+--http-uwsgi-temp-path=/var/temp/nginx/uwsgi \
+--http-scgi-temp-path=/var/temp/nginx/scgi
 ```
 
 上边将临时文件目录指定为/var/temp/nginx，需要在/var下创建temp及nginx目录：
@@ -115,3 +116,54 @@ Nginx支持三种类型的虚拟主机配置：
 * 基于ip的虚拟主机
 * 基于域名的虚拟主机
 * 基于端口的虚拟主机
+
+#### 4.4 配置SSL
+
+这里以免费的[Let's Encrypt](https://letsencrypt.org/)证书举例，。
+
+有两种方式安装：
+1. 使用[certbot](https://github.com/certbot/certbot)自动安装，安装过程中会自动配置当前的nginx，比较适用于通过Yum安装nginx的方式。
+2. 使用`letsencrypt`源码安装。
+
+前面安装Nginx是使用源码安装的，所以这里我还是使用第2种基于源码的方式安装，对于第1种使用certbot的方式应该也可以，可自行尝试。
+
+下载：
+```
+git clone https://github.com/letsencrypt/letsencrypt.git
+```
+
+```
+cd letsencrypt
+./letsencrypt-auto certonly --standalone 
+```
+
+期间会提示输入email和domain等信息
+
+生成的证书会存放在`/etc/letsencrypt/live/{domain}/`下，Nginx中用到的是`fullchain.pem` 和 `privkey.pem`，其它为Apache使用的证书。
+
+接下来需要配置Nginx，开启ssl，编辑`/usr/local/nginx/conf/nginx.conf`
+
+```
+    # HTTPS server
+    #
+    server {
+        listen       443 ssl;
+        server_name  example.net;
+
+        ssl_certificate      /etc/letsencrypt/live/17club.net/fullchain.pem;
+        ssl_certificate_key  /etc/letsencrypt/live/17club.net/privkey.pem;
+
+        ssl_session_cache    shared:SSL:1m;
+        ssl_session_timeout  5m;
+
+        ssl_ciphers  HIGH:!aNULL:!MD5;
+        ssl_prefer_server_ciphers  on;
+
+        location / {
+            root html;
+            index  index.html index.htm;
+        }
+    }
+
+```
+访问：https://example.net 验证效果。
